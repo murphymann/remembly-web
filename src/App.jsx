@@ -66,7 +66,8 @@ function App() {
           <ul>
             {memories.map((memory) => (
               <li key={memory.id}>
-                {memory.caption}
+                <img src={memory.photo_url} alt={memory.caption} width="200" />
+                <p>{memory.caption}</p>
               </li>
             ))}
           </ul>
