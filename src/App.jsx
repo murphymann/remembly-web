@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react'
+import MemoryCard from './MemoryCard'
+import LoginForm from './LoginForm'
 import './App.css'
 
 function App() {
-  // Form input state - controlled inputs for the login form
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-
   // The JWT we get back after a successful login. null means "not logged in".
   const [token, setToken] = useState(null)
 
@@ -32,31 +30,8 @@ function App() {
     fetchMemories()
   }, [token])
 
-  // Runs when the login form is submitted
-  async function handleLogin(e) {
-    e.preventDefault()
-
-    try {
-      const response = await fetch('https://remembly-production.up.railway.app/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      })
-
-      const data = await response.json()
-
-      if (data.token) {
-        setToken(data.token)
-      } else {
-        console.error('Login failed:', data.error)
-      }
-    } catch (err) {
-      console.error('Login failed:', err)
-    }
-  }
-
   return (
-    <div>
+    <div className="app">
       <h1>Remembly</h1>
 
       {token ? (
@@ -65,32 +40,13 @@ function App() {
           <p>You're logged in!</p>
           <ul className="memory-list">
             {memories.map((memory) => (
-              <li key={memory.id} className="memory-card">
-                <img src={memory.photo_url} alt={memory.caption} className="memory-photo" width="200"/>
-                <p className="memory-caption">{memory.caption}</p>
-              </li>
+              <MemoryCard key={memory.id} memory={memory} />
             ))}
           </ul>
         </div>
       ) : (
         // Not logged in: show the login form
-        <form onSubmit={handleLogin} className="login-form">
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email"
-            className="input-field"
-          />
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            className="input-field"
-          />
-          <button type="submit" className="submit-button">Log in</button>
-        </form>
+        <LoginForm onLogin={setToken} />
       )}
     </div>
   )
