@@ -61,33 +61,35 @@ function App() {
 
       {token ? (
         // Logged in: show the memories feed
-        <div>
+        <div className="feed">
           <p>You're logged in!</p>
-          <ul>
+          <ul className="memory-list">
             {memories.map((memory) => (
-              <li key={memory.id}>
-                <img src={memory.photo_url} alt={memory.caption} width="200" />
-                <p>{memory.caption}</p>
+              <li key={memory.id} className="memory-card">
+                <img src={memory.photo_url} alt={memory.caption} className="memory-photo" width="200"/>
+                <p className="memory-caption">{memory.caption}</p>
               </li>
             ))}
           </ul>
         </div>
       ) : (
         // Not logged in: show the login form
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleLogin} className="login-form">
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Email"
+            className="input-field"
           />
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
+            className="input-field"
           />
-          <button type="submit">Log in</button>
+          <button type="submit" className="submit-button">Log in</button>
         </form>
       )}
     </div>
